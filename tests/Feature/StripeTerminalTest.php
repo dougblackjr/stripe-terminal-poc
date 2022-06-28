@@ -104,6 +104,12 @@ class StripeTerminalTest extends TestCase
             }
         }
 
+        $output = [
+            'success' => $status === 'succeeded',
+            'response' => $response,
+        ];
+        // dd(json_encode($output));
+
         $this->assertNotEquals('', $status);
         $this->assertEquals('succeeded', $status);
     }
