@@ -34,12 +34,12 @@ class StripeTerminalTest extends TestCase
 
         // Create or retrieve customer
         $customers = $stripe->customers->search([
-            'query' => 'email:"test@happycog.com"',
+            'query' => 'email:"test2@happycog.com"',
         ]);
 
         if (!$customers->data || empty($customers->data)) {
             $customer = $stripe->customers->create([
-                'email' => 'test@happycog.com',
+                'email' => 'test2@happycog.com',
                 'name' => 'Happy Cogerson',
                 'description' => 'A test customer only',
             ]);
@@ -62,12 +62,12 @@ class StripeTerminalTest extends TestCase
 
         // Create or retrieve customer
         $customers = $stripe->customers->search([
-            'query' => 'email:"test@happycog.com"',
+            'query' => 'email:"test2@happycog.com"',
         ]);
 
         if (!$customers->data || empty($customers->data)) {
             $customer = $stripe->customers->create([
-                'email' => 'test@happycog.com',
+                'email' => 'test2@happycog.com',
                 'name' => 'Happy Cogerson',
                 'description' => 'A test customer only',
             ]);
@@ -94,7 +94,7 @@ class StripeTerminalTest extends TestCase
         // If it gets that far, and fails, then something broke.
         while ($testIt && $count < 10) {
             $response = $service->status($service->terminal->id);
-            if ($response !== 'in_progress') {
+            if ($response['status'] !== 'in_progress') {
                 $status = $response['status'];
                 $type = $response['type'];
                 $testIt = false;
@@ -112,5 +112,10 @@ class StripeTerminalTest extends TestCase
 
         $this->assertNotEquals('', $status);
         $this->assertEquals('succeeded', $status);
+
+        // Check that payment method is default
+        $this->assertNotNull($response['intent']);
+        // $pmResponse = $service->makeCustomerPaymentMethodDefault($customer->id, $response['intent']);
+        // dd(json_encode($pmResponse));
     }
 }
